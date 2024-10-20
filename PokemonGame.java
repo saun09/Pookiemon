@@ -13,29 +13,71 @@ public class PokemonGame {
         }
     }
 
+    // public static void listYourPokemonMenu(List<Pokemon> listOfPokemon, Scanner scanner) {
+    //     boolean back = false;
+    //     int choice;
+    //     while (!back) {
+    //         displayPokemon(listOfPokemon);
+    //         System.out.println((listOfPokemon.size() + 1) + ". back");
+    //         System.out.print("Enter choice: ");
+    //         choice = scanner.nextInt();
+
+    //         if (choice > 0 && choice <= listOfPokemon.size()) {
+    //             displayPokemonDetails(listOfPokemon, choice - 1);
+    //             System.out.println("1. Change name\n2. back");
+    //             int newChoice = scanner.nextInt();
+    //             scanner.nextLine();
+    //             if (newChoice == 1) {
+    //                 System.out.print("Enter new name for " + listOfPokemon.get(choice - 1).getName() + ": ");
+    //                 String newName = scanner.nextLine();
+    //                 listOfPokemon.get(choice - 1).changeName(newName);
+    //             }
+    //             continue;
+    //         }
+    //         back = true;
+    //     }
+    // }
+
     public static void listYourPokemonMenu(List<Pokemon> listOfPokemon, Scanner scanner) {
         boolean back = false;
         int choice;
+        
         while (!back) {
             displayPokemon(listOfPokemon);
             System.out.println((listOfPokemon.size() + 1) + ". back");
             System.out.print("Enter choice: ");
+            
             choice = scanner.nextInt();
-
+            scanner.nextLine(); // Clear the newline left after nextInt
+    
             if (choice > 0 && choice <= listOfPokemon.size()) {
                 displayPokemonDetails(listOfPokemon, choice - 1);
                 System.out.println("1. Change name\n2. back");
                 int newChoice = scanner.nextInt();
+                scanner.nextLine(); // Clear the newline again after nextInt
+                
                 if (newChoice == 1) {
                     System.out.print("Enter new name for " + listOfPokemon.get(choice - 1).getName() + ": ");
-                    String newName = scanner.next();
-                    listOfPokemon.get(choice - 1).changeName(newName);
+                    
+                    try {
+                        String newName = scanner.nextLine();
+                        if (newName.trim().isEmpty()) {
+                            throw new IllegalArgumentException("Name cannot be empty. Name change canceled.");
+                        }
+                        listOfPokemon.get(choice - 1).changeName(newName);
+                        System.out.println(listOfPokemon.get(choice - 1).getName() + " name changed successfully to " + newName + "!");
+                    } catch (IllegalArgumentException e) {
+                        System.out.println(e.getMessage());
+                    } catch (Exception e) {
+                        System.out.println("An unexpected error occurred: " + e.getMessage());
+                    }
                 }
                 continue;
             }
             back = true;
         }
     }
+    
 
     public static void fightPokemonMenu(List<Pokemon> listOfPokemon, Scanner scanner) {
         displayPokemon(listOfPokemon);
