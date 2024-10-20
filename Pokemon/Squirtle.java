@@ -13,5 +13,7 @@ public class Squirtle extends Pokemon {
 
     public Squirtle(List<Attack> squirtleAttacks) {
         super("Water", squirtleAttacks);
+        this.weaknessType.add("Grass");
+        this.weaknessType.add("Electric");
     }
 }

@@ -13,5 +13,6 @@ public class Bulbasaur extends Pokemon {
 
     public Bulbasaur(List<Attack> bulbasaurAttacks) {
         super("Grass", bulbasaurAttacks);
+        this.weaknessType.add("Fire");
     }
 }

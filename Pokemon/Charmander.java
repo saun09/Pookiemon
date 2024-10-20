@@ -13,5 +13,6 @@ public class Charmander extends Pokemon {
 
     public Charmander(List<Attack> charmanderAttacks) {
         super("Fire", charmanderAttacks);
+        this.weaknessType.add("Water");
     }
 }

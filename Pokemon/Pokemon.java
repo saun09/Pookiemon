@@ -1,12 +1,14 @@
 package Pokemon;
 
+import java.sql.SQLOutput;
+import java.util.ArrayList;
 import java.util.List;
 
 
 public class Pokemon {
     protected String name;
     protected String pokemonType;
-    protected String weaknessType;
+    protected List<String> weaknessType;
     protected int level;
     protected int maxHp;
     protected int remainingHp;
@@ -20,6 +22,7 @@ public class Pokemon {
         this.maxHp = 50 + (5 * level);
         this.remainingHp = this.maxHp;
         this.listOfAttacks = listOfAttacks;
+        this.weaknessType = new ArrayList<>();
         // this.asciiArt = asciiArt;
     }
 
@@ -51,9 +54,21 @@ public class Pokemon {
 //        return asciiArt;  // Getter for ASCII art
 //    }
 
-    public void takesDamage(int damageByAmount) {
-        this.remainingHp -= damageByAmount;
-        System.out.println(name + " took " + damageByAmount + " damage. Remaining HP: " + remainingHp);
+    public void takesDamage(Attack attack) {
+        int takeDamage;
+        if (this.weaknessType.contains(attack.getAttackType())) {
+            takeDamage = attack.getAttackDamage() * 2;
+        }
+        else {
+            takeDamage = attack.getAttackDamage();
+        }
+        if (this.remainingHp <= takeDamage) {
+            this.remainingHp = 0;
+        }
+        else {
+            this.remainingHp -= takeDamage;
+        }
+        System.out.println(name + " took " + takeDamage + " damage. HP: " + remainingHp + " / " + maxHp);
     }
 
     public void heal(int healByAmount) {
@@ -66,6 +81,9 @@ public class Pokemon {
     public String getName() {
         return name;
     }
+    public int getLevel() {
+        return level;
+    }
 
     public int getRemainingHp() {
         return remainingHp;
@@ -73,5 +91,25 @@ public class Pokemon {
 
     public List<Attack> getAttacks() {
         return listOfAttacks;
+    }
+
+    public void displayBattleDetails() {
+        System.out.println("Name: " + this.getName());
+        System.out.println("Level: " + this.getLevel());
+        System.out.println("HP: " + this.getRemainingHp() + " / " + this.maxHp);
+        System.out.println("Attacks:-");
+        for (int i = 0; i < getAttacks().size(); i++) {
+            System.out.println("\t" + (i + 1) + ". " + getAttacks().get(i).getName() + " (" + getAttacks().get(i).getRemainingUses() + " uses left)");
+        }
+    }
+
+    public void resetAttackUses() {
+        for (Attack attack : this.listOfAttacks) {
+            attack.resetUses();
+        }
+    }
+
+    public boolean isDefeated() {
+        return this.remainingHp == 0;
     }
 }

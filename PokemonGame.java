@@ -1,5 +1,6 @@
 import Pokemon.*;
 
+import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -38,19 +39,103 @@ public class PokemonGame {
 
     public static void fightPokemonMenu(List<Pokemon> listOfPokemon, Scanner scanner) {
         displayPokemon(listOfPokemon);
+        System.out.println("Player 1:-");
         System.out.print("Choose your pokemon: ");
-        int yourChoice = scanner.nextInt();
-        Pokemon yourPokemon = listOfPokemon.get(yourChoice - 1);
+        int player1Choice = scanner.nextInt();
+        Pokemon player1Pokemon = listOfPokemon.get(player1Choice - 1);
 
-        System.out.print("Choose pokemon to fight: ");
-        int opponentChoice = scanner.nextInt();
-        Pokemon opponentPokemon = listOfPokemon.get(opponentChoice - 1);
+        System.out.println("Player 2:-");
+        System.out.print("Choose your pokemon: ");
+        int player2Choice = scanner.nextInt();
+        Pokemon player2Pokemon = listOfPokemon.get(player2Choice - 1);
 
-        while (yourPokemon.getRemainingHp() != 0 || opponentPokemon.getRemainingHp() != 0) {
-            System.out.println("Your turn!");
+        player1Pokemon.resetAttackUses();
+        player2Pokemon.resetAttackUses();
+
+        boolean player1Run = false, player2Run = false;
+
+        boolean exit = false;
+
+        while (exit != true) {
+            System.out.println("Player 1:-");
+            player1Pokemon.displayBattleDetails();
+            System.out.println();
+            System.out.println("Player 2:-");
+            player2Pokemon.displayBattleDetails();
+
+            System.out.println("Player 1's turn!");
             System.out.println("1. Attack");
             System.out.println("2. Use item");
             System.out.println("3. Run");
+            System.out.print("Enter choice: ");
+            int choice = scanner.nextInt();
+            switch (choice) {
+                case 1:
+                    System.out.print("Enter attack: ");
+                    int attackChoice = scanner.nextInt();
+                    if (attackChoice <= 0 || attackChoice > player1Pokemon.getAttacks().size()) {
+                        System.out.println("Invalid Input...");
+                        continue;
+                    }
+                    if (player1Pokemon.getAttacks().get(attackChoice - 1).useAttack()) {
+                        player2Pokemon.takesDamage((player1Pokemon.getAttacks().get(attackChoice - 1)));
+                        if (player2Pokemon.isDefeated()) {
+                            System.out.println(player2Pokemon.getName() + " is defeated! " + player1Pokemon.getName() + " wins!");
+                            exit = true;
+                            continue;
+                        }
+                    }
+                    break;
+                case 2:
+                    break;
+                case 3:
+                    System.out.println("Player 1 chose to run away.");
+                    System.out.println(player2Pokemon.getName() + " wins!");
+                    exit = true;
+                    continue;
+                default:
+                    System.out.println("Invalid Input...");
+            }
+
+            System.out.println("Player 1:-");
+            player1Pokemon.displayBattleDetails();
+            System.out.println();
+            System.out.println("Player 2:-");
+            player2Pokemon.displayBattleDetails();
+
+            System.out.println("Player 2's turn!");
+            System.out.println("1. Attack");
+            System.out.println("2. Use item");
+            System.out.println("3. Run");
+            System.out.print("Enter choice: ");
+            choice = scanner.nextInt();
+            switch (choice) {
+                case 1:
+                    System.out.print("Enter attack: ");
+                    int attackChoice = scanner.nextInt();
+                    if (attackChoice <= 0 || attackChoice > player2Pokemon.getAttacks().size()) {
+                        System.out.println("Invalid Input...");
+                        continue;
+                    }
+                    if (player2Pokemon.getAttacks().get(attackChoice - 1).useAttack()) {
+                        player1Pokemon.takesDamage((player2Pokemon.getAttacks().get(attackChoice - 1)));
+                        if (player1Pokemon.isDefeated()) {
+                            System.out.println(player2Pokemon.getName() + " is defeated! " + player1Pokemon.getName() + " wins!");
+                            exit = true;
+                            continue;
+                        }
+                    }
+                    break;
+                case 2:
+                    break;
+                case 3:
+                    System.out.println("Player 2 chose to run away.");
+                    System.out.println(player1Pokemon.getName() + " wins!");
+                    exit = true;
+                    continue;
+                default:
+                    System.out.println("Invalid Input...");
+            }
         }
     }
 
@@ -196,61 +281,61 @@ public class PokemonGame {
 //        pokemons.get(choice - 1).hibernate();
 //    }
 
-    public static void battlePokemon(List<Pokemon> pokemons, Scanner scanner, Bag bag) {
-        System.out.println("Choose your Pokémon to battle with:");
-        for (int i = 0; i < pokemons.size(); i++) {
-            System.out.println((i + 1) + ". " + pokemons.get(i).getName());
-        }
-    
-        int userChoice = scanner.nextInt();
-        Pokemon userPokemon = pokemons.get(userChoice - 1);
-//        System.out.println(userPokemon.getAsciiArt());
-    
-        // Ensure the opponent is different from the chosen Pokémon
-        Pokemon opponent;
-        do {
-            int opponentIndex = (int) (Math.random() * pokemons.size());
-            opponent = pokemons.get(opponentIndex);
-        } while (opponent == userPokemon);  // Keep selecting until it's different
-    
-        System.out.println("You are battling against " + opponent.getName() + "!");
-    
-        // Implement battle logic (use Bag during battle if needed)
-        boolean battleOver = false;
-        while (!battleOver) {
-            System.out.println(userPokemon.getName() + "'s HP: " + userPokemon.getRemainingHp());
-            System.out.println(opponent.getName() + "'s HP: " + opponent.getRemainingHp());
-    
-            // User attacks
-            System.out.println("Choose an attack:");
-            List<Attack> userAttacks = userPokemon.getAttacks();
-            for (int i = 0; i < userAttacks.size(); i++) {
-                System.out.println((i + 1) + ". " + userAttacks.get(i).getName() + " (" + userAttacks.get(i).getRemainingUses() + " uses left)");
-            }
-    
-            int attackChoice = scanner.nextInt();
-            Attack selectedAttack = userAttacks.get(attackChoice - 1);
-            selectedAttack.useAttack();
-            System.out.println(userPokemon.getName() + " used " + selectedAttack.getName() + "!");
-    
-            // Apply attack effect on opponent (adjust damage as needed)
-            opponent.takesDamage(10);  // Example damage
-            if (opponent.getRemainingHp() <= 0) {
-                System.out.println(opponent.getName() + " has fainted! You win the battle!");
-                battleOver = true;
-                break;
-            }
-    
-            // Opponent attacks
-            System.out.println(opponent.getName() + " attacks you!");
-            userPokemon.takesDamage(10);  // Example damage
-            if (userPokemon.getRemainingHp() <= 0) {
-                System.out.println(userPokemon.getName() + " has fainted! You lose the battle!");
-                battleOver = true;
-            }
-        }
-    }
-    
+//    public static void battlePokemon(List<Pokemon> pokemons, Scanner scanner, Bag bag) {
+//        System.out.println("Choose your Pokémon to battle with:");
+//        for (int i = 0; i < pokemons.size(); i++) {
+//            System.out.println((i + 1) + ". " + pokemons.get(i).getName());
+//        }
+//
+//        int userChoice = scanner.nextInt();
+//        Pokemon userPokemon = pokemons.get(userChoice - 1);
+////        System.out.println(userPokemon.getAsciiArt());
+//
+//        // Ensure the opponent is different from the chosen Pokémon
+//        Pokemon opponent;
+//        do {
+//            int opponentIndex = (int) (Math.random() * pokemons.size());
+//            opponent = pokemons.get(opponentIndex);
+//        } while (opponent == userPokemon);  // Keep selecting until it's different
+//
+//        System.out.println("You are battling against " + opponent.getName() + "!");
+//
+//        // Implement battle logic (use Bag during battle if needed)
+//        boolean battleOver = false;
+//        while (!battleOver) {
+//            System.out.println(userPokemon.getName() + "'s HP: " + userPokemon.getRemainingHp());
+//            System.out.println(opponent.getName() + "'s HP: " + opponent.getRemainingHp());
+//
+//            // User attacks
+//            System.out.println("Choose an attack:");
+//            List<Attack> userAttacks = userPokemon.getAttacks();
+//            for (int i = 0; i < userAttacks.size(); i++) {
+//                System.out.println((i + 1) + ". " + userAttacks.get(i).getName() + " (" + userAttacks.get(i).getRemainingUses() + " uses left)");
+//            }
+//
+//            int attackChoice = scanner.nextInt();
+//            Attack selectedAttack = userAttacks.get(attackChoice - 1);
+//            selectedAttack.useAttack();
+//            System.out.println(userPokemon.getName() + " used " + selectedAttack.getName() + "!");
+//
+//            // Apply attack effect on opponent (adjust damage as needed)
+//            opponent.takesDamage(10);  // Example damage
+//            if (opponent.getRemainingHp() <= 0) {
+//                System.out.println(opponent.getName() + " has fainted! You win the battle!");
+//                battleOver = true;
+//                break;
+//            }
+//
+//            // Opponent attacks
+//            System.out.println(opponent.getName() + " attacks you!");
+//            userPokemon.takesDamage(10);  // Example damage
+//            if (userPokemon.getRemainingHp() <= 0) {
+//                System.out.println(userPokemon.getName() + " has fainted! You lose the battle!");
+//                battleOver = true;
+//            }
+//        }
+//    }
+//
     
 
     public static void useBagItems(List<Pokemon> pokemons, Scanner scanner, Bag bag) {

@@ -22,14 +22,23 @@ public class Attack {
         return this.remainingUses;
     }
 
-    public int useAttack() {
+    public String getAttackType() { return  this.attackType; }
+
+    public int getAttackDamage() { return  this.attackDamage; }
+
+    public boolean useAttack() {
         if (this.getRemainingUses() > 0) {
             this.remainingUses--;
             System.out.println(getName() + " used. Remaining uses: " + getRemainingUses());
-            return 1;
+            return true;
         } else {
             System.out.println(getName() + " has no uses left!");
-            return 0;
+            return false;
         }
     }
+
+    public void resetUses() {
+        this.remainingUses = this.maxUses;
+    }
+
 }
