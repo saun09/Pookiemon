@@ -5,30 +5,35 @@ import java.util.List;
 
 public class Pokemon {
     protected String name;
-    protected String type;
+    protected String pokemonType;
+    protected String weaknessType;
     protected int level;
-    protected int hp;
-    protected List<Attack> attacks;
-    protected String asciiArt;
+    protected int maxHp;
+    protected int remainingHp;
+    protected List<Attack> listOfAttacks;
+//    protected String asciiArt;
 
-    public Pokemon(String type) {
-        this.name = String.valueOf(getClass());
-//        this.type = type;
+    public Pokemon(String pokemonType, List<Attack> listOfAttacks) {
+        this.name = getClass().getSimpleName();
+        this.pokemonType = pokemonType;
         this.level = 10;
-        this.hp = 100;
-//        this.attacks = attacks;
+        this.maxHp = 50 + (5 * level);
+        this.remainingHp = this.maxHp;
+        this.listOfAttacks = listOfAttacks;
         // this.asciiArt = asciiArt;
     }
 
     public void displayDetails() {
-        System.out.println("Pokemon: " + getClass());
+        System.out.println("Pokemon: " + this.getName());
         System.out.println("Name: " + name);
-        System.out.println("Type: " + type);
+        System.out.println("Type: " + pokemonType);
+        System.out.println("Weakness: " + weaknessType);
         System.out.println("Level: " + level);
-        System.out.println("HP: " + hp);
-        System.out.println("Attacks: ");
-        for (Attack attack : attacks) {
-            System.out.println("\t" + attack.getName());
+        System.out.println("Max HP: " + maxHp);
+        System.out.println("Remaining HP: " + remainingHp);
+        System.out.println("Attacks:");
+        for (int i = 0; i < listOfAttacks.size(); i++) {
+            System.out.println("\t" + (i + 1) + ". " + listOfAttacks.get(i).getName());
         }
 //        System.out.println(asciiArt);
     }
@@ -47,24 +52,26 @@ public class Pokemon {
 //    }
 
     public void takesDamage(int damageByAmount) {
-        this.hp -= damageByAmount;
-        System.out.println(name + " took " + damageByAmount + " damage. Remaining HP: " + hp);
+        this.remainingHp -= damageByAmount;
+        System.out.println(name + " took " + damageByAmount + " damage. Remaining HP: " + remainingHp);
     }
 
     public void heal(int healByAmount) {
-        this.hp += healByAmount;
-        if (this.)
+        this.remainingHp += healByAmount;
+        if (this.remainingHp > this.maxHp) {
+            this.remainingHp = maxHp;
+        }
     }
 
     public String getName() {
         return name;
     }
 
-    public int getHp() {
-        return hp;
+    public int getRemainingHp() {
+        return remainingHp;
     }
 
     public List<Attack> getAttacks() {
-        return attacks;
+        return listOfAttacks;
     }
 }

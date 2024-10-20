@@ -2,7 +2,7 @@ package Pokemon;
 
 import java.util.List;
 
-public class Pikachu extends Pokemon {
+public class Bulbasaur extends Pokemon {
 
 //    private String name;
 //    private String pokemo;
@@ -11,7 +11,7 @@ public class Pikachu extends Pokemon {
 //    private List<Attack> attacks;
 //    private String asciiArt;
 
-    public Pikachu(List<Attack> pikachuAttacks) {
-        super("Electric", pikachuAttacks);
+    public Bulbasaur(List<Attack> bulbasaurAttacks) {
+        super("Grass", bulbasaurAttacks);
     }
 }

@@ -3,12 +3,15 @@ package Pokemon;
 public class Attack {
     private final String attackName;
     private int attackDamage;
-    private String attackEffect;
+    private String attackType;
+    private int maxUses;
     private int remainingUses;
 
-    public Attack(String name, int uses) {
+    public Attack(String name, int damage, String damageType, int uses) {
         this.attackName = name;
-        this.remainingUses = uses;
+        this.attackDamage = damage;
+        this.attackType = damageType;
+        this.maxUses = uses;
     }
 
     public String getName() {
@@ -19,12 +22,14 @@ public class Attack {
         return this.remainingUses;
     }
 
-    public void useAttack() {
+    public int useAttack() {
         if (this.getRemainingUses() > 0) {
             this.remainingUses--;
-            System.out.println(this.attackName + " used. Remaining uses: " + this.remainingUses);
+            System.out.println(getName() + " used. Remaining uses: " + getRemainingUses());
+            return 1;
         } else {
-            System.out.println(this.attackName + " has no uses left!");
+            System.out.println(getName() + " has no uses left!");
+            return 0;
         }
     }
 }
