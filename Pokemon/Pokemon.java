@@ -1,9 +1,7 @@
 package Pokemon;
 
-import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.List;
-
 
 public class Pokemon {
     protected String name;
@@ -13,17 +11,22 @@ public class Pokemon {
     protected int maxHp;
     protected int remainingHp;
     protected List<Attack> listOfAttacks;
-//    protected String asciiArt;
 
     public Pokemon(String pokemonType, List<Attack> listOfAttacks) {
+        if (pokemonType == null || pokemonType.isEmpty()) {
+            throw new IllegalArgumentException("Pokemon type cannot be null or empty");
+        }
+        if (listOfAttacks == null || listOfAttacks.isEmpty()) {
+            throw new IllegalArgumentException("Attack list cannot be null or empty");
+        }
+
         this.name = getClass().getSimpleName();
         this.pokemonType = pokemonType;
-        this.level = 10;
+        this.level = 10;  // You might want to allow this to be passed as a parameter
         this.maxHp = 50 + (5 * level);
         this.remainingHp = this.maxHp;
         this.listOfAttacks = listOfAttacks;
         this.weaknessType = new ArrayList<>();
-        // this.asciiArt = asciiArt;
     }
 
     public void displayDetails() {
@@ -38,40 +41,41 @@ public class Pokemon {
         for (int i = 0; i < listOfAttacks.size(); i++) {
             System.out.println("\t" + (i + 1) + ". " + listOfAttacks.get(i).getName());
         }
-//        System.out.println(asciiArt);
     }
 
     public void changeName(String newName) {
+        if (newName == null || newName.isEmpty()) {
+            throw new IllegalArgumentException("New name cannot be null or empty");
+        }
         this.name = newName;
         System.out.println("Pokemon's new name is: " + newName);
     }
 
-//    public void hibernate() {
-//        System.out.println(name + " is hibernating.");
-//    }
-
-//    public String getAsciiArt() {
-//        return asciiArt;  // Getter for ASCII art
-//    }
-
     public void takesDamage(Attack attack) {
+        if (attack == null) {
+            throw new IllegalArgumentException("Attack cannot be null");
+        }
+
         int takeDamage;
         if (this.weaknessType.contains(attack.getAttackType())) {
             takeDamage = attack.getAttackDamage() * 2;
-        }
-        else {
+        } else {
             takeDamage = attack.getAttackDamage();
         }
+
         if (this.remainingHp <= takeDamage) {
             this.remainingHp = 0;
-        }
-        else {
+        } else {
             this.remainingHp -= takeDamage;
         }
         System.out.println(name + " took " + takeDamage + " damage. HP: " + remainingHp + " / " + maxHp);
     }
 
     public void heal(int healByAmount) {
+        if (healByAmount < 0) {
+            throw new IllegalArgumentException("Heal amount cannot be negative");
+        }
+
         this.remainingHp += healByAmount;
         if (this.remainingHp > this.maxHp) {
             this.remainingHp = maxHp;
@@ -81,6 +85,7 @@ public class Pokemon {
     public String getName() {
         return name;
     }
+
     public int getLevel() {
         return level;
     }
