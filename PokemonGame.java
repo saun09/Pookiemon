@@ -223,8 +223,8 @@ public class PokemonGame {
         List<Attack> charmanderAttacks = new ArrayList<>();
         charmanderAttacks.add(new Attack("Ember", 5, "Fire", 5));
         charmanderAttacks.add(new Attack("Metal Claw", 10, "Fire", 5));
-        charmanderAttacks.add(new Attack("Tail Whip", 10, "Fire", 5));
-        charmanderAttacks.add(new Attack("Rage", 10, "Fire", 5));
+        charmanderAttacks.add(new Attack("Flame Burst", 10, "Fire", 5));
+        charmanderAttacks.add(new Attack("Dragon Breath", 10, "Fire", 5));
 
         Pokemon charmander = new Charmander(charmanderAttacks);
 
@@ -232,16 +232,17 @@ public class PokemonGame {
         List<Attack> squirtleAttacks = new ArrayList<>();
         squirtleAttacks.add(new Attack("Water Gun", 10, "Water", 5));
         squirtleAttacks.add(new Attack("Bubble", 10, "Water", 5));
-        squirtleAttacks.add(new Attack("Tackle", 5, "Water", 5));
-        squirtleAttacks.add(new Attack("Withdraw", 15, "Water", 5));
+        squirtleAttacks.add(new Attack("Surf", 5, "Water", 5));
+        squirtleAttacks.add(new Attack("Hydro Pump", 15, "Water", 5));
+
 
         Pokemon squirtle = new Squirtle(squirtleAttacks);
 
 
         List<Attack> bulbasaurAttacks = new ArrayList<>();
         bulbasaurAttacks.add(new Attack("Vine Whip", 10, "Grass", 5));
-        bulbasaurAttacks.add(new Attack("Tackle", 5, "Grass", 5));
-        bulbasaurAttacks.add(new Attack("Growl", 15, "Grass", 5));
+        bulbasaurAttacks.add(new Attack("Petal Dance", 5, "Grass", 5));
+        bulbasaurAttacks.add(new Attack("Leaf Tornado", 15, "Grass", 5));
         bulbasaurAttacks.add(new Attack("Razor Leaf", 10, "Grass", 5));
 
         Pokemon bulbasaur = new Bulbasaur(bulbasaurAttacks);
